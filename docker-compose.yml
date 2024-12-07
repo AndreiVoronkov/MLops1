@@ -1,0 +1,61 @@
+# docker-compose.yaml
+
+# docker-compose up -d   -- команда для запуска
+# docker-compose ps   -- проверить состояние контейнеров
+# docker-compose down  -- остановить и удалить контейнеры
+# http://localhost:9000  -- перейти на сайт
+
+
+version: "3.8"
+
+services:
+  ml_service:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - minio
+
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minio12
+      MINIO_ROOT_PASSWORD: minio12
+    command: server --console-address ":9001" /data
+
+
+
+
+
+# docker-compose.yaml
+# version: '3.7'
+
+# services:
+#   minio:
+#     image: minio/minio:latest
+#     command: server --console-address ":9001" /data/
+#     ports:
+#       - "9000:9000"
+#       - "9001:9001"
+#     environment:
+#       MINIO_ROOT_USER: user_login
+#       MINIO_ROOT_PASSWORD: user_password
+#     volumes:
+#       - minio-storage:/data
+#     healthcheck:
+#       test:
+#         [
+#           "CMD",
+#           "curl",
+#           "-f",
+#           "http://0.0.0.0:9000/minio/health/live"
+#         ]
+#       interval: 30s
+#       timeout: 20s
+#       retries: 3
+#     container_name: minio
+
+
